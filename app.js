@@ -1,20 +1,18 @@
-const fs = require('fs');
-const jsonFile = "./db/db.txt";
-
 var express = require('express');
 var bodyParser = require('body-parser');
 
+const PORT = 5555;
+const fs = require('fs');
+const jsonFile = "./db/db.txt";
 const readJSON = () => {
     let rawdata = fs.readFileSync(jsonFile);
     return JSON.parse(rawdata);
 };
 
-const PORT = 5555;
-
 var app = express();
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 
 
 app.get('/api/v1/todos', (req, res) => {
@@ -24,28 +22,52 @@ app.get('/api/v1/todos', (req, res) => {
 
 app.get('/api/v1/todos/:id', (req, res) => {
     console.log(req.params);
-    var oneTask = readJSON().find(function (oneTask) {
+    var oneTask = readJSON().find((oneTask) => {
         return oneTask.id === Number(req.params.id)
     });
     res.send(oneTask)
 });
 
-app.post('/api/v1/todos', function (req,res) {
+app.post('/api/v1/todos', (req,res) => {
     var newToDo = {
         id: req.body.id,
         title: req.body.title,
         description: req.body.description
     };
     var dbc = readJSON();
-    dbc.push(JSON.stringify(newToDo));
-//    var noja = JSON.stringify(newToDo);
+    dbc.push(newToDo);
     console.log(dbc);
-    fs.writeFileSync('./db/db.txt', dbc);
-//    readJSON().push(newToDo);
-//    console.log(req.body);
-    res.send('Success!')
+    fs.writeFileSync('./db/db.txt', JSON.stringify(dbc));
+    res.sendStatus(200);
 });
 
-app.listen(PORT, function () {
+app.put('/api/v1/todos/:id', (req, res) => {
+    var arr = readJSON();
+    var patchTask = {
+        id: req.body.id,
+        title: req.body.title,
+        description: req.body.description
+    };
+    var added = false;
+    for(var i=0;i<arr.length; i++){
+        if(arr[i].id === patchTask.id){
+            arr.splice(i,1,patchTask);
+            added = true;
+            break;
+        }
+    }
+    fs.writeFileSync('./db/db.txt', JSON.stringify(arr));
+    res.sendStatus(200);
+});
+
+app.delete('/api/v1/todos/:id', (req, res) => {
+    var clearArr = readJSON().filter((deleteTask) => {
+        return deleteTask.id !== Number(req.params.id)
+    });
+    fs.writeFileSync('./db/db.txt', JSON.stringify(clearArr));
+    res.sendStatus(200);
+});
+
+app.listen(PORT, () => {
     console.log('API starter')
 });
