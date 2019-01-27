@@ -1,8 +1,13 @@
+const fs = require('fs');
+const jsonFile = "./db/db.txt";
+
 var express = require('express');
 var bodyParser = require('body-parser');
 
-//import express from 'express';
-//import bodyParser from 'body-parser';
+const readJSON = () => {
+    let rawdata = fs.readFileSync(jsonFile);
+    return JSON.parse(rawdata);
+};
 
 const PORT = 5555;
 
@@ -13,16 +18,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 app.get('/api/v1/todos', (req, res) => {
-    res.send(readJSON());
-//    readJSON();
+    var todos = readJSON().map(el => el.description);
+    res.send(todos);
 });
 
 app.get('/api/v1/todos/:id', (req, res) => {
     console.log(req.params);
-    var artist = artists.find(function (artist) {
-        return artist.id === Number(req.params.id)
+    var oneTask = readJSON().find(function (oneTask) {
+        return oneTask.id === Number(req.params.id)
     });
-    res.send(artist.name)
+    res.send(oneTask.title)
 });
 
 
