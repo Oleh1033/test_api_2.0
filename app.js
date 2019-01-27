@@ -27,10 +27,24 @@ app.get('/api/v1/todos/:id', (req, res) => {
     var oneTask = readJSON().find(function (oneTask) {
         return oneTask.id === Number(req.params.id)
     });
-    res.send(oneTask.title)
+    res.send(oneTask)
 });
 
-
+app.post('/api/v1/todos', function (req,res) {
+    var newToDo = {
+        id: req.body.id,
+        title: req.body.title,
+        description: req.body.description
+    };
+    var dbc = readJSON();
+    dbc.push(JSON.stringify(newToDo));
+//    var noja = JSON.stringify(newToDo);
+    console.log(dbc);
+    fs.writeFileSync('./db/db.txt', dbc);
+//    readJSON().push(newToDo);
+//    console.log(req.body);
+    res.send('Success!')
+});
 
 app.listen(PORT, function () {
     console.log('API starter')
