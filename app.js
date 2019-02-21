@@ -14,8 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-    var todos = readJSON().map(el => el.description);
-    res.send(todos);
+    res.send('Hello Oleh');
 });
 
 app.get('/api/v1/todos', (req, res) => {
