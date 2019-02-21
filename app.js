@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-const PORT = process.env.PORT || 1337;
+// const PORT = process.env.PORT || 1337;
 const fs = require('fs');
 const jsonFile = "./db/db.txt";
 const readJSON = () => {
@@ -70,6 +70,6 @@ app.delete('/api/v1/todos/:id', (req, res) => {
     res.sendStatus(200);
 });
 
-app.listen(process.env.PORT || PORT, () => {
+app.listen(process.env.PORT || 1336, () => {
     console.log('API starter')
 });
