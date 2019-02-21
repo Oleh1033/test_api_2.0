@@ -68,6 +68,6 @@ app.delete('/api/v1/todos/:id', (req, res) => {
     res.sendStatus(200);
 });
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
     console.log('API starter')
 });
