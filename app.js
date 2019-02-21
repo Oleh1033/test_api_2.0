@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-const PORT = 5555;
+const PORT = process.env.PORT || 1337;
 const fs = require('fs');
 const jsonFile = "./db/db.txt";
 const readJSON = () => {
